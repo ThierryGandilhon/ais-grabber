@@ -571,6 +571,25 @@
      "file": "/usr/src/node-red/node_modules/node-red-node-tail/28-tail.js"
     }
    }
+  },
+  "node-red-contrib-amqp": {
+   "name": "node-red-contrib-amqp",
+   "version": "0.4.5",
+   "local": false,
+   "nodes": {
+    "amqp": {
+     "name": "amqp",
+     "types": [
+      "amqp in",
+      "amqp out",
+      "amqp-server"
+     ],
+     "enabled": true,
+     "local": false,
+     "module": "node-red-contrib-amqp",
+     "file": "/usr/src/node-red/node_modules/node-red-contrib-amqp/lib/amqp.js"
+    }
+   }
   }
  },
  "_credentialSecret": "0430139894768e82f5532a3011067559d36e56a056cd72c4ca160d7aec00e096",
