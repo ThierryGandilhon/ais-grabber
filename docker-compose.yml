@@ -1,0 +1,101 @@
+version: '3'
+
+networks :
+  ais-network:
+    driver: bridge
+
+
+services:
+
+  ais-producer:
+    build: "./nodered"
+    depends_on:
+      - message_bus
+    restart: on-failure
+    volumes:
+      - "./data/ais-producer:/data"
+    ports:
+      - "1880:1880"
+    networks:
+      - ais-network
+
+  ais-worker-database:
+    build: "./nodered"
+    depends_on:
+      - message_bus
+      - database
+    restart: on-failure
+    volumes:
+      - "./data/ais-worker-database:/data"
+    ports:
+      - "1881:1880"
+    networks:
+      - ais-network
+
+  ais-worker-file:
+    build: "./nodered"
+    depends_on:
+      - message_bus
+    restart: on-failure
+    volumes:
+      - "./data/ais-worker-file:/data"
+    ports:
+      - "1882:1880"
+    networks:
+      - ais-network
+
+  message_bus:
+    build: "./rabbitmq"
+    restart: on-failure
+    ports:
+      - "15672:15672" 
+    networks:
+      - ais-network
+
+  database:
+    image: influxdb
+    restart: on-failure
+    volumes: 
+      - "./data/database:/var/lib/influxdb"
+    environment:
+      - INFLUXDB_DB=aisdb
+      - INFLUXDB_ADMIN=true
+      - INFLUXDB_ADMIN_USER=admin
+      - INFLUXDB_ADMIN_PASSWORD=admin
+      - INFLUXDB_USER=aisdb
+      - INFLUXDB_PASSWORD=aisdb
+    networks:
+      - ais-network
+      
+  grafana:
+    image: "grafana/grafana"
+    depends_on:
+      - database
+    restart: on-failure
+    volumes: 
+      - "./data/grafana:/var/lib/grafana"
+    ports:
+      - "3000:3000"
+    networks:
+      - ais-network
+
+  # chronograf:
+  #   image: chronograf
+  #   depends_on: 
+  #     - database
+  #   restart: on-failure
+  #   volumes:
+  #     - "./data/chronograf:/var/lib/chronograf"
+  #   ports:
+  #     - "8888:8888"
+  #   networks:
+  #     - ais-network
+
+  # elk:
+  #   image: sebp/elk
+  #   ports:
+  #     - "5601:5601"
+  #     - "9200:9200"
+  #     - "5044:5044"
+  #   networks:
+  #     - ais-network
