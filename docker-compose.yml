@@ -14,8 +14,6 @@ services:
     restart: on-failure
     volumes:
       - "./data/ais-producer:/data"
-    ports:
-      - "1880:1880"
     networks:
       - ais-network
 
@@ -27,8 +25,6 @@ services:
     restart: on-failure
     volumes:
       - "./data/ais-worker-database:/data"
-    ports:
-      - "1881:1880"
     networks:
       - ais-network
 
@@ -39,16 +35,12 @@ services:
     restart: on-failure
     volumes:
       - "./data/ais-worker-file:/data"
-    ports:
-      - "1882:1880"
     networks:
       - ais-network
 
   message_bus:
     build: "./rabbitmq"
     restart: on-failure
-    ports:
-      - "15672:15672" 
     networks:
       - ais-network
 
@@ -76,6 +68,20 @@ services:
       - "./data/grafana:/var/lib/grafana"
     ports:
       - "3000:3000"
+    networks:
+      - ais-network
+
+  nginx:
+    build: "./nginx"
+    depends_on:
+      - grafana
+      - message_bus
+      - ais-producer
+      - ais-worker-database
+      - ais-worker-file
+    restart: on-failure
+    ports:
+      - "80:80"
     networks:
       - ais-network
 
