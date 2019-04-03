@@ -4,7 +4,6 @@ networks :
   ais-network:
     driver: bridge
 
-
 services:
 
   ais-producer:
@@ -77,3 +76,4 @@ services:
       - "80:80"
     networks:
       - ais-network
+

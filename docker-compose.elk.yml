@@ -1,0 +1,46 @@
+version: '3'
+
+networks :
+  logging-network:
+    driver: bridge
+
+services:
+
+  logspout:
+    image: gliderlabs/logspout:v3
+    command: 'udp://logstash:5000'
+    volumes:
+      - '/var/run/docker.sock:/tmp/docker.sock'
+    depends_on:
+      - elasticsearch
+      - logstash
+      - kibana
+    networks:
+      - logging-network
+
+  logstash:
+    image: logstash:2.1.1
+    environment:
+      - STDOUT=true
+    depends_on:
+      - elasticsearch
+      - kibana
+    command: 'logstash -e "input { udp { port => 5000 } } output { elasticsearch { hosts => elasticsearch } }"'
+    networks:
+      - logging-network
+
+  kibana:
+    image: kibana:4.1.2
+    environment:
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
+    ports:
+      - '5601:5601'
+    depends_on:
+      - elasticsearch
+    networks:
+      - logging-network
+
+  elasticsearch:
+    image: elasticsearch:1.5.2
+    networks:
+      - logging-network
