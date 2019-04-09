@@ -7,8 +7,12 @@ networks :
 services:
 
   logspout:
-    image: gliderlabs/logspout:v3
+    image: gliderlabs/logspout:latest
     command: 'udp://logstash:5000'
+    labels:
+      - "nolog=true"
+    environment:
+      - "EXCLUDE_LABEL=nolog"
     volumes:
       - '/var/run/docker.sock:/tmp/docker.sock'
     depends_on:
@@ -17,9 +21,11 @@ services:
       - logging-network
 
   logstash:
-    image: logstash:2.1.1
+    image: logstash:6.7.0
+    labels:
+      - "nolog=true"
     environment:
-      - STDOUT=true
+      - "STDOUT=true"
     depends_on:
       - kibana
     command: 'logstash -e "input { udp { port => 5000 } } filter { if [docker][image] =~ /^logstash/ {  drop { } } } output { elasticsearch { hosts => elasticsearch } }"'
@@ -27,7 +33,9 @@ services:
       - logging-network
 
   kibana:
-    image: kibana:4.1.2
+    image: kibana:6.7.0
+    labels:
+      - "nolog=true"
     environment:
       - ELASTICSEARCH_URL=http://elasticsearch:9200
     ports:
@@ -38,6 +46,10 @@ services:
       - logging-network
 
   elasticsearch:
-    image: elasticsearch:1.5.2
+    image: elasticsearch:6.7.0
+    labels:
+      - "nolog=true"
+    volumes:
+      - "./data/elasticsearch:/usr/share/elasticsearch/data"
     networks:
       - logging-network
