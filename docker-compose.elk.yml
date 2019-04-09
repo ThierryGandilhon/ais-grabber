@@ -12,9 +12,7 @@ services:
     volumes:
       - '/var/run/docker.sock:/tmp/docker.sock'
     depends_on:
-      - elasticsearch
       - logstash
-      - kibana
     networks:
       - logging-network
 
@@ -23,9 +21,8 @@ services:
     environment:
       - STDOUT=true
     depends_on:
-      - elasticsearch
       - kibana
-    command: 'logstash -e "input { udp { port => 5000 } } output { elasticsearch { hosts => elasticsearch } }"'
+    command: 'logstash -e "input { udp { port => 5000 } } filter { if [docker][image] =~ /^logstash/ {  drop { } } } output { elasticsearch { hosts => elasticsearch } }"'
     networks:
       - logging-network
 
