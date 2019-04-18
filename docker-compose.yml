@@ -9,7 +9,7 @@ services:
   ais-producer:
     build: "./nodered"
     depends_on:
-      - message_bus
+      - message-bus
     volumes:
       - "./data/ais-producer:/data"
     networks:
@@ -18,7 +18,7 @@ services:
   ais-worker-database:
     build: "./nodered"
     depends_on:
-      - message_bus
+      - message-bus
       - database
     volumes:
       - "./data/ais-worker-database:/data"
@@ -28,13 +28,13 @@ services:
   ais-worker-file:
     build: "./nodered"
     depends_on:
-      - message_bus
+      - message-bus
     volumes:
       - "./data/ais-worker-file:/data"
     networks:
       - ais-network
 
-  message_bus:
+  message-bus:
     build: "./rabbitmq"
     networks:
       - ais-network
@@ -68,7 +68,7 @@ services:
     build: "./nginx"
     depends_on:
       - grafana
-      - message_bus
+      - message-bus
       - ais-producer
       - ais-worker-database
       - ais-worker-file
