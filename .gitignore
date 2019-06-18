@@ -1,3 +1,4 @@
 data/database
+data/database-mongo
 elasticsearch
 .DS_Store

@@ -25,6 +25,16 @@ services:
     networks:
       - ais-network
 
+  ais-worker-database-mongo:
+    build: "./nodered"
+    depends_on:
+      - message-bus
+      - database-mongo
+    volumes:
+      - "./data/ais-worker-database-mongo:/data"
+    networks:
+      - ais-network
+
   ais-worker-file:
     build: "./nodered"
     depends_on:
@@ -53,6 +63,21 @@ services:
     networks:
       - ais-network
       
+  database-mongo:
+    image: mongo
+    # volumes: 
+    #   - "./data/database-mongo:/data/db"
+    networks:
+      - ais-network
+      
+  mongo-express:
+    image: mongo-express
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=database-mongo
+      # - ME_CONFIG_SITE_BASEURL=/mongo-express/
+    networks:
+      - ais-network
+      
   grafana:
     image: "grafana/grafana"
     depends_on:
@@ -72,6 +97,9 @@ services:
       - ais-producer
       - ais-worker-database
       - ais-worker-file
+      - ais-worker-database-mongo
+      - database-mongo
+      - mongo-express
     ports:
       - "80:80"
     networks:

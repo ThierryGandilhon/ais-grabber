@@ -590,6 +590,25 @@
      "file": "/usr/src/node-red/node_modules/node-red-contrib-amqp/lib/amqp.js"
     }
    }
+  },
+  "node-red-node-mongodb": {
+   "name": "node-red-node-mongodb",
+   "version": "0.0.14",
+   "local": false,
+   "nodes": {
+    "mongo": {
+     "name": "mongo",
+     "types": [
+      "mongodb",
+      "mongodb out",
+      "mongodb in"
+     ],
+     "enabled": true,
+     "local": false,
+     "module": "node-red-node-mongodb",
+     "file": "/usr/src/node-red/node_modules/node-red-node-mongodb/66-mongodb.js"
+    }
+   }
   }
  },
  "_credentialSecret": "417dc6c4e78a2a77b20675e2d856357d50984ed0fa1847ef71bc7dbcc35ea3ab",
