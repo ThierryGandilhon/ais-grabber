@@ -2,7 +2,7 @@
  "nodes": {
   "node-red": {
    "name": "node-red",
-   "version": "0.20.2",
+   "version": "0.20.5",
    "local": false,
    "nodes": {
     "inject": {
@@ -574,7 +574,7 @@
   },
   "node-red-contrib-amqp": {
    "name": "node-red-contrib-amqp",
-   "version": "0.4.5",
+   "version": "1.0.1",
    "local": false,
    "nodes": {
     "amqp": {
