@@ -34,6 +34,15 @@ services:
     networks:
       - ais-network
 
+  ais-map-display:
+    build: "./nodered"
+    depends_on:
+      - message-bus
+    volumes:
+      - "./data/ais-map-display:/data"
+    networks:
+      - ais-network
+
   message-bus:
     build: "./rabbitmq"
     networks:

@@ -1,4 +1,5 @@
 data/database
 data/database-mongo
+data/grafana/plugins
 elasticsearch
 .DS_Store
